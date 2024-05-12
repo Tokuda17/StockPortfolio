@@ -17,17 +17,32 @@ function saveStocks() {
   sessionStorage.setItem("stocks", JSON.stringify(stocks));
 }
 
+//Checks to see if stock is already in list. If so updates shares. Else adds new stock.
+function updateList(stockSymbol, numberOfShares) {
+  for (let i = 0; i < stocks.length; i++) {
+    console.log(stockSymbol);
+    if (stocks[i].symbol == stockSymbol) {
+      stocks[i].shares += numberOfShares;
+      return;
+    }
+  }
+  stocks.push({ symbol: stockSymbol, shares: numberOfShares });
+}
+
 //Function that handles form submission
 document
   .getElementById("stockForm")
   .addEventListener("submit", function (event) {
     //get value of the stock symbol and price of each share
-    const stockSymbol = document.getElementById("stockSymbol").value;
-    const numberOfShares = document.getElementById("numberOfShares").value;
+    const stockSymbol = document
+      .getElementById("stockSymbol")
+      .value.toUpperCase();
+    const numberOfShares = parseInt(
+      document.getElementById("numberOfShares").value
+    );
 
     //add stock to the array
-    stocks.push({ symbol: stockSymbol, shares: numberOfShares });
-
+    updateList(stockSymbol, numberOfShares);
     //saves stocks to session storage
     saveStocks();
     //Updates the display list
